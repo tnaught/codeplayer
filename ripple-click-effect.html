@@ -2,57 +2,61 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>ripple-click-effect-google-material-design</title>
+    <title>ripple click effect</title>
     <style type="text/css">
-        /* custom fonts - Bitter, Monserrat */
+        /* import fonts */
         @import url(http://fonts.googleapis.com/css?family=Montserrat|Bitter);
         /*basic reset*/
         *{margin:0;padding:0;}
-        body{background:hsl(180, 10%, 10%);}
-        h1{font:normal 32px/32px Bitter;color:#fff;text-align:center;padding:85px 100px;}
-        /*nav styles*/
-        ul{background:#fff;border-top:6px solid hsl(180, 40%, 60%);width:200px;margin:0 auto;}
-        ul li{list-style: none;position:relative;overflow: hidden;}
-        ul li a{font: normal 14px/28px Montserrat;color:hsl(180, 40%, 40%);display:block;padding:10px 15px;text-decoration: none;cursor: pointer;user-select:none;position:relative;}
-        .ink{position:absolute;display:block;border-radius:100%;background:hsl(180, 40%, 80%);transform:scale(0);}
-        .ink.animate{-webkit-animation:ripple 0.65s linear;}
-        @-webkit-keyframes ripple {
-            100%{opacity: 0;transform:scale(2.5);}
-        }
+        body{background:hsl(120, 4%, 36%);}
+        h1{font:normal 36px/36px Bitter;color:#fff;text-align:center;padding:50px 200px;}
+        /*ul*/
+        ul{width:200px;margin:0 auto;background:#fff;border-top:6px solid hsl(180, 40%, 60%);}
+        ul li{position:relative;overflow: hidden;list-style: none;}
+        ul li a{display: block;position: relative;font:normal 18px/24px Montserrat;color:hsl(180, 40%, 40%);text-decoration: none;cursor: pointer;user-select:none;padding:10px 15px;}
+        .ink{position:absolute;display: block;-webkit-transform:scale(0);transform:scale(0);background:hsl(180, 40%, 80%);border-radius:50%;}
+        .ink.animate{-webkit-animation: ripple .65s linear;}
+        @-webkit-keyframes ripple{100%{opacity: 0;-webkit-transform:scale(2.5);transform: scale(2.5);}}
     </style>
 </head>
 <body>
     <h1>Ripple Click Effect</h1>
     <ul>
         <li><a href="javascript:void(0);">Dashboard</a></li>
-        <li><a href="javascript:void(0);">My Account</a></li>
-        <li><a href="javascript:void(0);">Direct Message</a></li>
-        <li><a href="javascript:void(0);">Chat Rooms</a></li>
-        <li><a href="javascript:void(0);">Settings</a></li>
-        <li><a href="javascript:void(0);">logout</a></li>
+        <li><a href="javascript:void(0);">Services</a></li>
+        <li><a href="javascript:void(0);">Contract</a></li>
+        <li><a href="javascript:void(0);">Manage title</a></li>
+        <li><a href="javascript:void(0);">Other</a></li>
     </ul>
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script type="text/javascript">
-        $(function() {
-            var parent, ink, d, x, y;
-            $('ul li a').click(function(e) {
-                parent = $(this).parent();
-                if(parent.find('.ink').length == 0) {
-                    parent.prepend('<span class="ink"></span>');
-                }
-                ink = parent.find('.ink');
-                ink.removeClass('animate');
-                if(!ink.height() && !ink.width()) {
-                    d = Math.max(parent.outerWidth(), parent.outerHeight());
-                    ink.css({height:d, width:d});
-                }
-
-                //set ink position
-                x = e.pageX - parent.offset().left - ink.width()/2;
-                y = e.pageY - parent.offset().top - ink.height()/2;
-                ink.css({top: y + 'px', left: x + 'px'}).addClass('animate');
+    $(function() {
+        var $parent, $ink, x, y;
+        $('ul li a').click(function(e) {
+            $parent = $(this).parent();
+            if($parent.find('.ink').length == 0) {
+                $parent.prepend('<span class="ink"></span>');
+            }
+            $ink = $parent.find('.ink');
+            if(!$ink.width() || !$ink.height()) {
+                var d = Math.max($parent.outerWidth(), $parent.outerHeight());
+                $ink.css({
+                    width: d,
+                    height: d
+                })
+            }
+            if($ink.hasClass('animate')) {
+                $ink.removeClass('animate');
+            }
+            var l = e.pageX - $parent.offset().left - $ink.width()/2;
+            var t = e.pageY - $parent.offset().top - $ink.height()/2;
+            $ink.css({
+                left: l,
+                top: t
             })
+            $ink.addClass('animate');
         })
+    })
     </script>
 </body>
 </html>

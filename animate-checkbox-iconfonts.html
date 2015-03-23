@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>animate-checkbox-iconfonts</title>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <style type="text/css">
+        @import url(http://fonts.googleapis.com/css?family=Montserrat);
+        /*reset*/
+        *{margin:0;padding:0;}
+        body{background:#fff;font-family: Montserrat;padding-top:100px;}
+        h1{font-size:18px;padding:20px;color:#333;text-align:center;}
+        ul{width:300px;margin:0 auto;}
+        ul li{list-style: none;padding:10px;color:#333;}
+        label{padding-left: 30px;font-size:14px;cursor: pointer;position: relative;}
+        label:before, label:after{font-family:FontAwesome;font-size: 21px;position:absolute;left:0;top:0;}
+        label:before{content: '\f096';}
+        label:after{content:'\f046';overflow:hidden;max-width:0px;opacity: .5;transition:all .5s;}
+        input[type="checkbox"]{display:none;}
+        input[type="checkbox"]:checked + label:after{max-width: 25px;opacity: 1};
+    </style>
+</head>
+<body>
+    <h1>Animate checkboxes using iconfonts</h1>
+    <ul>
+        <li><input type="checkbox" name="one" id="one"><label for="one">Create checkbox</label></li>
+        <li><input type="checkbox" name="two" id="two"><label for="two">Assign label</label></li>
+        <li><input type="checkbox" name="three" id="three"><label for="three">Import iconfont</label></li>
+        <li><input type="checkbox" name="four" id="four"><label for="four">pseudo elements</label></li>
+        <li><input type="checkbox" name="five" id="five"><label for="five">animate icon width</label></li>
+    </ul>
+</body>
+</html>

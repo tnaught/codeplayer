@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>multi-step-form-progress-animate</title>
+    <style type="text/css">
+        @import url(http://fonts.googleapis.com/css?family=Montserrat);
+        /*basic reset*/
+        *{margin:0;padding:0;}
+        html{height:100%;background:url(bg1.png);background:linear-gradient(rgba(255,123,0,.1), rgba(255,222,124,.3)), url(bj1.png);}
+        body{font-family: montserrat;font-size:14px;}
+        #msform{width:400px;margin:10px auto;position: relative;}
+        /*progressbar*/
+        #progressbar{counter-reset:step;overflow:hidden;margin-bottom: 30px;}
+        #progressbar li{
+            list-style: none;float:left;
+            box-sizing:border-box;width:33.33%;
+            color:#fff;font-size:13px;text-align:center;text-transform: uppercase;
+            position: relative;
+        }
+        #progressbar li:before{
+            counter-increment: step;
+            content:counter(step);
+            display: block;width:20px;line-height: 20px;
+            margin:0px auto;
+            margin-bottom: 5px;
+            background:#fff;
+            font-size:10px;color:#333;
+            border-radius:3px;
+        }
+        #progressbar li:after{
+            content:"";
+            width:100%;height:2px;
+            position:absolute;top:9px;left:-50%;z-index:-1;
+            background:#fff;
+        }
+        #progressbar li:first-child:after{content:none;}
+        /*active color #27ae60*/
+        #progressbar li.active:before, #progressbar li.active:after{background:#27ae60;color:#fff;}
+        /*fieldset*/
+        fieldset{
+            width:80%;box-sizing:border-box;margin:0 10%;padding:20px 30px;
+            background:#fff;border:0 none;border-radius: 3px;
+            box-shadow:0 0 15px 2px rgba(0,0,0,.4);
+            position:absolute;
+            text-align:center;
+        }
+        fieldset:not(:first-of-type){display:none;}
+        .fs-title{font-size:15px;margin-bottom: 10px;color:#333;}
+        .fs-subtitle{font-size:13px;margin-bottom:20px;font-weight:normal;color:#666;}
+        fieldset input,fieldset textarea{
+            box-sizing:border-box;width: 100%;
+            padding:10px;
+            color:#666;
+            border:1px solid #ccc;
+            margin-bottom:10px;
+            border-radius:3px;
+            font: 13px montserrat;//input和textarea不会继承body的font-family 
+            /*outline:none;*/
+        }
+        /*input, textarea, keygen, select, button - inline-block*/
+        .action-button{
+            width: 100px;
+            border: 0 none;
+            color:#fff;background:#27ae60;
+            outline:none;
+            font-weight: 700;
+            border-radius:1px;
+            padding:10px 5px;
+            margin: 10px 5px;
+            cursor: pointer;
+        }
+        .action-button:active,.action-button:hover {
+            box-shadow: 0 0 0 2px #fff,0 0 0px 3px #27ae60;
+        }
+    </style>
+</head>
+<body>
+    <form action="" id="msform">
+    <!-- progresssbar -->
+        <ul id="progressbar">
+            <li class="active">Step one</li>
+            <li>Step two</li>
+            <li>Step three</li>
+        </ul>
+        <!-- fieldset -->
+        <fieldset>
+            <h2 class="fs-title">Create your account</h2>
+            <h3 class="fs-subtitle">This is step one</h3>
+            <input type="text" name="email" id="Email" placeholder="Email">
+            <input type="password" name="password" id="" placeholder="Password">
+            <input type="password" name="" id="" placeholder="Confirm Password">
+            <input type="button" value="Next" class="next action-button">
+        </fieldset>
+        <fieldset>
+            <h2 class="fs-title">Account profile</h2>
+            <h3 class="fs-subtitle">This is step two</h3>
+            <input type="text" name="email" id="Email" placeholder="Email">
+            <input type="password" name="password" id="" placeholder="Password">
+            <input type="password" name="" id="" placeholder="Confirm Password">
+            <input type="button" value="Previous" class="previous action-button">
+            <input type="button" value="Next" class="next action-button">
+        </fieldset>
+        <fieldset>
+            <h2 class="fs-title">More detail</h2>
+            <h3 class="fs-subtitle">This is step three</h3>
+            <input type="text" name="email" id="Email" placeholder="Email">
+            <input type="password" name="password" id="" placeholder="Password">
+            <input type="password" name="" id="" placeholder="Confirm Password">
+            <input type="button" value="Previous" class="previous action-button">
+            <input type="submit" value="Submit" class="submit action-button">
+        </fieldset>
+    </form>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="jquery.easing.min.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            var current_fs, next_fs, previous_fs;
+            var scale, opacity, left;//animate property
+            var animating = false;//prevent double click
+            // next action-button click
+            $('.next').click(function() {
+                if(animating) return false;
+                animating = true;
+                
+                current_fs = $(this).parent();
+                next_fs = current_fs.next();
+
+                $('#progressbar').children().eq($('fieldset').index(next_fs)).addClass('active');
+                next_fs.show();
+                current_fs.animate({
+                    opacity: 0
+                }, {
+                    step: function(now, tw) {
+                        // 1.current_fs scale to 80%  
+                        // 2.next_fs left from 50% to 0
+                        // 3.next-fs opacity from 0 to 1
+                        scale = 1 - (1-now)*0.2;
+                        left = now*50 + '%';
+                        opacity = 1-now;
+                        current_fs.css({'transform': 'scale('+scale+')'});
+                        next_fs.css({left: left, opacity:opacity});
+                    },
+                    duration: 800,
+                    complete: function() {
+                        current_fs.hide();
+                        animating = false;                        
+                    },
+                    easing: 'easeInOutBack'
+                })
+            });
+            //previous click
+            $('.previous').click(function() {
+                if(animating) return;
+                animating = true;
+
+                current_fs = $(this).parent();
+                previous_fs = current_fs.prev();
+
+                $('#progressbar').children().eq($('fieldset').index(current_fs)).removeClass('active');
+                previous_fs.show();
+                current_fs.animate({
+                    opacity: 0
+                },{
+                    step: function(now, tw) {
+                        left = (-0.5*now + 0.5)*100 + '%';
+                        scale = -0.2*now + 1;
+                        opacity = 1 - now;
+                        current_fs.css({left: left})
+                        previous_fs.css({transform:'scale(' + scale + ')', opacity: opacity});
+                    },
+                    duration: 800,
+                    complete: function() {
+                        animating = false;
+                        current_fs.hide();
+                    },
+                    easing: 'easeInOutBack'
+                })
+            });
+            //submit
+            $('submit').click(function() {
+                return false;
+            });
+        })
+    </script>
+</body>
+</html>

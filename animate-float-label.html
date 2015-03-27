@@ -46,13 +46,13 @@
             })
         })
         $('.flp input').blur(function() {
-            if($.trim($(this).html()) == '') {
+            if($.trim($(this).val()) == '') {
                 $(this).next().removeClass('focused').children().stop(true).each(function(i) {
-                var d = i*50;
-                $(this).delay(d).animate({
-                    top: 0
-                }, 500)
-            })
+                    var d = i*50;
+                    $(this).delay(d).animate({
+                        top: 0
+                    }, 500)
+                })
             }
         })
     })
